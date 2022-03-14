@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class StartingPage extends BasePage {
 
-    @FindBy(xpath = "//*[@data-location=\"pl\"]")
+    @FindBy(xpath = "//a[@data-name=\"Poland\"]")
     private WebElement polandButton;
 
     public StartingPage(WebDriver webDriver) {

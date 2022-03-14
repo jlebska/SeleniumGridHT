@@ -1,18 +1,24 @@
 package org.epam.poland.aqa.course.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
 
 public class MainPage extends BasePage {
 
     @FindBy(id = "onetrust-reject-all-handler")
-    private WebElement cookiesButton;
+    private List<WebElement> cookiesButton;
 
-    @FindBy(xpath = "//a[contains(@href,\"ona.html\")]")
+    //    @FindBy(xpath = "//a[contains(@href,\"ona.html\")]")
     private WebElement categoryHer;
 
-    @FindBy(xpath = "//*[@id=\"menu-links\"]/li[2]/ul/li[1]/a")
+    //    @FindBy(xpath = "//*[@id=\"menu-links\"]/li[2]/ul/li[1]/a")
     private WebElement categoryBestsellers;
 
     public MainPage(WebDriver webDriver) {
@@ -20,13 +26,16 @@ public class MainPage extends BasePage {
     }
 
     public MainPage closeCookiesAlert() {
-        cookiesButton.click();
+        if (cookiesButton.size() != 0) {
+            cookiesButton.get(0).click();
+        }
         return this;
     }
 
-    public BestsellersPage openCategory() {
+    public HerPage openHerCategory() {
+        categoryHer = new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@href,\"ona.html\")]")));
         categoryHer.click();
-        categoryBestsellers.click();
-        return new BestsellersPage(webDriver);
+        return new HerPage(webDriver);
     }
 }

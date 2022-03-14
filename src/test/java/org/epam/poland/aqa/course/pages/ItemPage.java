@@ -23,7 +23,7 @@ public class ItemPage extends BasePage {
 
     private WebElement pickedSize;
 
-    @FindBy(xpath = "//*[contains(@class,\"goto\")]")
+    //    @FindBy(xpath = "//*[contains(@class,\"goto\")]")
     private WebElement shoppingCartButton;
 
     protected ItemPage(WebDriver webDriver) {
@@ -31,6 +31,8 @@ public class ItemPage extends BasePage {
     }
 
     public ItemPage pickSize() {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("window.scrollBy(0,350)", "");
         sizeOptions.click();
         pickedSize = new WebDriverWait(webDriver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class =\"option \"]/*[text()=\"M\"]")));
@@ -42,13 +44,17 @@ public class ItemPage extends BasePage {
     public ItemPage addToCart() {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
         js.executeScript("window.scrollBy(0,350)", "");
-        addToCartButton = webDriver.findElement(By.xpath("//button[contains(@class,\"buy\")]"));
+        addToCartButton = new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,\"buy\")]")));
         addToCartButton.click();
 
         return this;
     }
 
     public CartPage goToCart() {
+        webDriver.navigate().refresh();
+        shoppingCartButton = new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,\"goto\")]")));
         shoppingCartButton.click();
         return new CartPage(webDriver);
     }

@@ -1,20 +1,26 @@
 package org.epam.poland.aqa.course.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class HerPage extends BasePage{
+import java.time.Duration;
 
-    @FindBy (xpath = "//a[contains(@href,\"bestsellery\")]")
+public class HerPage extends BasePage {
+
+    //    @FindBy (xpath = "//a[contains(@href,\"bestsellery\")]")
     private WebElement bestsellersCategory;
 
     protected HerPage(WebDriver webDriver) {
         super(webDriver);
     }
 
-    public HerPage clickBestsellers(){
+    public BestsellersPage clickBestsellers() {
+        bestsellersCategory = new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@href,\"bestsellery\") and @role]")));
         bestsellersCategory.click();
-        return new HerPage(webDriver);
+        return new BestsellersPage(webDriver);
     }
 }

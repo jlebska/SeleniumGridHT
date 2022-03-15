@@ -1,12 +1,15 @@
 package org.epam.poland.aqa.course;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.epam.poland.aqa.course.pages.StartingPage;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class AppTest {
@@ -16,13 +19,19 @@ public class AppTest {
     @Parameters("browser")
 
     @BeforeClass
-    public void beforeTest(String browser) {
+    public void beforeTest(String browser) throws MalformedURLException {
         if (browser.equalsIgnoreCase("firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-            driver = new FirefoxDriver();
+            String url = "http://localhost:4444";
+            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+            desiredCapabilities.setBrowserName("firefox");
+            desiredCapabilities.setPlatform(Platform.WINDOWS);
+            driver = new RemoteWebDriver((new URL(url)), desiredCapabilities);
         } else if (browser.equalsIgnoreCase("chrome")) {
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
+            String url = "http://localhost:4444";
+            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+            desiredCapabilities.setBrowserName("chrome");
+            desiredCapabilities.setPlatform(Platform.WINDOWS);
+            driver = new RemoteWebDriver((new URL(url)), desiredCapabilities);
         }
         driver.manage().window().maximize();
     }
@@ -37,57 +46,24 @@ public class AppTest {
     }
 
     @Test
-    public void correctCategoryTest() {
+    public void correctLangTest() {
         StartingPage startingPage = new StartingPage(driver);
-        String category = null;
-        if (driver instanceof ChromeDriver) {
-            category = startingPage
-                    .open()
-                    .pickCountry()
-                    .closeCookiesAlert()
-                    .openHerCategory()
-                    .clickBestsellers()
-                    .getCategory();
-        } else if (driver instanceof FirefoxDriver) {
-            category = startingPage
-                    .open()
-                    .pickCountry()
-                    .openHerCategory()
-                    .clickBestsellers()
-                    .getCategory();
-        }
-        Assert.assertEquals(category, "BESTSELLERY", "Picked category is not correct");
+        boolean correctLang = startingPage
+                .open()
+                .pickCountry()
+                .checkLang();
+        Assert.assertTrue(correctLang, "The language is not correct");
     }
 
     @Test
-    public void addingToCartTest() {
+    public void findingStoreInCountryTest() {
         StartingPage startingPage = new StartingPage(driver);
-        String size = null;
-        if (driver instanceof ChromeDriver) {
-            size = startingPage
-                    .open()
-                    .pickCountry()
-                    .closeCookiesAlert()
-                    .openHerCategory()
-                    .clickBestsellers()
-                    .pickItem()
-                    .pickSize()
-                    .addToCart()
-                    .goToCart()
-                    .getSize();
-        } else if (driver instanceof FirefoxDriver) {
-            size = startingPage
-                    .open()
-                    .pickCountry()
-                    .openHerCategory()
-                    .clickBestsellers()
-                    .pickItem()
-                    .pickSize()
-                    .addToCart()
-                    .goToCart()
-                    .getSize();
-        }
-        Assert.assertEquals(size, "M", "Incorrect size of item in the cart");
+        String correctCountry = startingPage
+                .open()
+                .pickCountry()
+                .goToFindStore()
+                .getCountry();
+        Assert.assertEquals(correctCountry, "Poland", "The country is not correct");
     }
 
     @AfterClass

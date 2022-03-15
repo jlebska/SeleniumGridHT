@@ -4,14 +4,14 @@
     <test name="FirefoxTest">
         <parameter name="browser" value="firefox"/>
         <classes>
-            <class name="org.epam.poland.aqa.course.AppTest">
+            <class name="org.epam.poland.aqa.course.tests.AppTest">
             </class>
         </classes>
     </test>
     <test name="ChromeTest">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="org.epam.poland.aqa.course.AppTest">
+            <class name="org.epam.poland.aqa.course.tests.AppTest">
             </class>
         </classes>
     </test>

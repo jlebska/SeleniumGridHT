@@ -1,4 +1,4 @@
-package org.epam.poland.aqa.course;
+package org.epam.poland.aqa.course.tests;
 
 import org.epam.poland.aqa.course.pages.StartingPage;
 import org.openqa.selenium.Platform;
